@@ -1,0 +1,14 @@
+<div class="recap" *ngIf="pollution$ | async as pollution">
+    <h2>Pollution {{ pollution.id }} - {{ pollution.titre }}</h2>
+    <ul>
+        <li><strong>Type :</strong> {{ pollution.type_pollution }}</li>
+        <li><strong>Description :</strong> {{ pollution.description }}</li>
+        <li><strong>Date :</strong> {{ pollution.date_observation }}</li>
+        <li><strong>Lieu :</strong> {{ pollution.lieu }}</li>
+        <li><strong>Latitude :</strong> {{ pollution.latitude }}</li>
+        <li><strong>Longitude :</strong> {{ pollution.longitude }}</li>
+        <li *ngIf="pollution.userId"><strong>Découvert par :</strong> ID utilisateur #{{ pollution.userId }}</li>
+        <div class="photo" [style.background-image]="'url(' + pollution.photo_url + ')'"></div>
+    </ul>
+    <button routerLink="/pollutions">Retour</button>
+</div>

@@ -1,0 +1,27 @@
+<h1>S'inscrire</h1>
+
+<form [formGroup]="utilisateurForm" class="utilisateur-form" (ngSubmit)="onSubmit()">
+    <p>
+        Nom :
+        <input type="text" formControlName="nom" placeholder="Nom de l'utilisateur" />
+    </p>
+
+    <p>
+        Prénom :
+        <input type="text" formControlName="prenom" placeholder="Prénom de l'utilisateur" />
+    </p>
+
+    <p>
+        Login :
+        <input type="text" formControlName="login" placeholder="Login de l'utilisateur" />
+    </p>
+
+    <p>
+        Mot de passe :
+        <input type="password" formControlName="password" placeholder="Mot de passe de l'utilisateur" />
+    </p>
+
+    <button type="submit" [disabled]="utilisateurForm.invalid">S'inscrire</button>
+    <!-- J'ai déjà un compte -->
+    <button type="button" routerLink="/login">J'ai déjà un compte</button>
+</form>

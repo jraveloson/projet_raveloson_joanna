@@ -1,0 +1,33 @@
+<div class="header">
+    <h2>Liste des pollutions</h2>
+    <div class="user-info">
+        <span>Connecté : <strong>{{ utilisateur?.login }}</strong></span>
+        <button type="button" (click)="logout()">Déconnexion</button>
+    </div>
+</div>
+
+<label for="filterType">Filtrer par type :</label>
+<select id="filterType" [(ngModel)]="selectedType">
+    <option value="">-- Sélectionnez --</option>
+    <option value="plastique">Plastique</option>
+    <option value="chimique">Chimique</option>
+    <option value="depot sauvage">Dépôt sauvage</option>
+    <option value="eau">Eau</option>
+    <option value="air">Air</option>
+    <option value="autre">Autre</option>
+</select>
+<button routerLink="/pollutions/add">Ajouter</button>
+
+<ul *ngIf="pollutions$ | async as pollutions; else loading">
+    <li *ngFor="let p of pollutions | filterByType:selectedType" [routerLink]="['/pollutions', p.id]">
+        <div class="pollution-title">{{ p.titre }}</div>
+        <div class="pollution-discoverer" *ngIf="p.userId">Découvert par : <strong>ID utilisateur #{{ p.userId
+                }}</strong></div>
+        <button [routerLink]="['/pollutions/edit', p.id]" (click)="$event.stopPropagation()">Modifier</button>
+        <button type="button" *ngIf="p.id !== undefined" (click)="deletePollution(p.id!); $event.stopPropagation()">
+            Supprimer
+        </button>
+    </li>
+</ul>
+
+<ng-template #loading>Chargement…</ng-template>

@@ -1,0 +1,10 @@
+<h2>Liste des utilisateurs</h2>
+<button routerLink="/utilisateurs/add">Ajouter Utilisateur</button>
+
+<ul *ngIf="utilisateurs$ | async as utilisateurs; else loading">
+    <li *ngFor="let u of utilisateurs" [routerLink]="['/utilisateurs', u.id]">
+        {{ u.nom }} {{ u.prenom }}
+    </li>
+</ul>
+
+<ng-template #loading>Chargement…</ng-template>

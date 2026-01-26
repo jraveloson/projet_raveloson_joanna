@@ -1,0 +1,53 @@
+<h1>Pollution</h1>
+
+<form [formGroup]="pollutionForm" class="pollution-form" (ngSubmit)="onSubmit()">
+    <p>
+        Titre :
+        <input type="text" formControlName="titre" placeholder="Titre de la pollution" />
+    </p>
+
+    <p>
+        Type :
+        <select formControlName="type_pollution">
+            <option value="">-- Sélectionnez --</option>
+            <option value="Plastique">Plastique</option>
+            <option value="Chimique">Chimique</option>
+            <option value="Dépôt sauvage">Dépôt sauvage</option>
+            <option value="Eau">Eau</option>
+            <option value="Air">Air</option>
+            <option value="Autre">Autre</option>
+        </select>
+    </p>
+
+    <p>
+        Description :
+        <textarea formControlName="description" placeholder="Description"></textarea>
+    </p>
+
+    <p>
+        Date :
+        <input type="date" formControlName="date_observation" />
+    </p>
+
+    <p>
+        Lieu :
+        <input type="text" formControlName="lieu" placeholder="Lieu" />
+    </p>
+
+    <p>
+        Latitude :
+        <input type="number" formControlName="latitude" placeholder="Latitude" />
+    </p>
+
+    <p>
+        Longitude :
+        <input type="number" formControlName="longitude" placeholder="Longitude" />
+    </p>
+
+    <p>
+        Photo :
+        <input type="url" formControlName="photo_url" placeholder="URL de la photo" />
+    </p>
+
+    <button type="submit" [disabled]="pollutionForm.invalid">Déclarer</button>
+</form>

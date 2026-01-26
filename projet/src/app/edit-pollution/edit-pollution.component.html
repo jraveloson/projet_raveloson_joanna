@@ -1,0 +1,54 @@
+<h2>Modifier une pollution</h2>
+
+<form [formGroup]="pollutionForm" (ngSubmit)="onSubmit()">
+
+    <label>
+        Titre :
+        <input formControlName="titre" type="text" />
+    </label>
+
+    <label>
+        Type :
+        <input formControlName="type_pollution" type="text" />
+    </label>
+
+    <label>
+        Description :
+        <textarea formControlName="description"></textarea>
+    </label>
+
+    <label>
+        Date :
+        <input formControlName="date_observation" type="date" />
+    </label>
+
+    <label>
+        Lieu :
+        <input formControlName="lieu" type="text" />
+    </label>
+
+    <label>
+        Latitude :
+        <input formControlName="latitude" type="number" />
+    </label>
+
+    <label>
+        Longitude :
+        <input formControlName="longitude" type="number" />
+    </label>
+
+    <label>
+        Photo (URL) :
+        <input formControlName="photo_url" type="text" />
+    </label>
+
+    <button type="submit" [disabled]="pollutionForm.invalid">
+        ✅ Enregistrer les modifications
+    </button>
+</form>
+
+<br>
+
+<button routerLink="/pollutions">
+    ⬅️ Retour à la liste
+</button>

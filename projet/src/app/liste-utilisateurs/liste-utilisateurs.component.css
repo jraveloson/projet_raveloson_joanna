@@ -1,0 +1,109 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    /* fond environnement — change l'URL si tu veux une autre image */
+    background: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80') no-repeat center center/cover;
+}
+
+/* Titre */
+h2 {
+    color: #6b4b00;
+    /* marron doux pour contraste avec le jaune */
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    margin-bottom: 1rem;
+}
+
+/* Conteneur de la liste (bloc central verre dépoli) */
+ul {
+    width: 95%;
+    max-width: 720px;
+    list-style: none;
+    padding: 1.5rem;
+    margin: 0;
+    background: rgba(255, 245, 200, 0.12);
+    /* jaune pâle translucide */
+    border-radius: 16px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+/* Items */
+ul li {
+    background: rgba(255, 240, 150, 0.18);
+    /* petite teinte jaune */
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    margin-bottom: 0;
+    font-weight: 600;
+    color: #5b3e00;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Si tu veux que l'item occupe moins d'espace sur grand écran */
+@media (min-width: 900px) {
+    ul li {
+        width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* Bouton Ajouter */
+button {
+    align-self: center;
+    background: linear-gradient(135deg, #f6c84c, #f39c12);
+    /* jaune -> orange */
+    border: none;
+    color: #2b1b00;
+    padding: 0.7rem 1.2rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 1rem 0;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    box-shadow: 0 4px 12px rgba(243, 156, 18, 0.18);
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(243, 156, 18, 0.22);
+}
+
+/* Lien cliquable (titre dans la ligne) */
+ul li a,
+ul li [routerLink] {
+    color: inherit;
+    text-decoration: none;
+    flex: 1;
+}
+
+/* petit style pour état "chargement" */
+ng-template[loading] {
+    color: #fff;
+}
+
+/* Responsive : réduire le padding sur mobile */
+@media (max-width: 600px) {
+    ul {
+        padding: 1rem;
+        border-radius: 12px;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+    }
+
+    button {
+        padding: 0.6rem 1rem;
+        font-size: 0.95rem;
+    }
+}
