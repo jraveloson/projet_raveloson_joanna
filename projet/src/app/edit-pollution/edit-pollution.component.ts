@@ -4,16 +4,22 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PollutionService } from '../services/pollution.service';
 import { switchMap } from 'rxjs';
 import { Pollution } from '../models/pollution.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-edit-pollution',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, CommonModule],
   templateUrl: './edit-pollution.component.html',
   styleUrls: ['./edit-pollution.component.css']
 })
 export class EditPollutionComponent {
   pollutionForm: FormGroup;
+  imagePreview: string | null = null;
+  imageSizeError: string | null = null;
+  id!: number;
+  readonly MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB en bytes
+  readonly MAX_FILE_SIZE_MB = 2;
 
   constructor(private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -37,12 +43,10 @@ export class EditPollutionComponent {
     });
   }
 
-  id!: number;
-
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (!idParam || isNaN(Number(idParam))) {
-      console.error('ID invalide dans l’URL');
+      console.error("ID invalide dans l'URL");
       this.router.navigate(['/']);
       return;
     }
@@ -50,7 +54,46 @@ export class EditPollutionComponent {
 
     this.pollutionService.getOne(this.id).subscribe(pollution => {
       this.pollutionForm.patchValue(pollution!);
+      // Afficher l'image existante si elle est en base64 ou une URL
+      if (pollution?.photo_url) {
+        this.imagePreview = pollution.photo_url;
+      }
     });
+  }
+
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    this.imageSizeError = null;
+    this.imagePreview = null;
+
+    if (!file) {
+      this.pollutionForm.get('photo_url')?.reset();
+      return;
+    }
+
+    // Vérifier la taille du fichier
+    if (file.size > this.MAX_FILE_SIZE) {
+      this.imageSizeError = `Le fichier est trop volumineux (${(file.size / 1024 / 1024).toFixed(2)}MB). Taille maximale: ${this.MAX_FILE_SIZE_MB}MB`;
+      this.pollutionForm.get('photo_url')?.reset();
+      return;
+    }
+
+    // Vérifier le type de fichier
+    if (!file.type.startsWith('image/')) {
+      this.imageSizeError = 'Veuillez sélectionner un fichier image valide';
+      this.pollutionForm.get('photo_url')?.reset();
+      return;
+    }
+
+    // Convertir en base64
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const base64String = e.target.result;
+      this.pollutionForm.get('photo_url')?.setValue(base64String);
+      this.imagePreview = base64String;
+      this.imageSizeError = null;
+    };
+    reader.readAsDataURL(file);
   }
 
   onSubmit(): void {

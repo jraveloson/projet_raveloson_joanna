@@ -37,18 +37,23 @@
         <input formControlName="longitude" type="number" />
     </label>
 
-    <label>
-        Photo (URL) :
-        <input formControlName="photo_url" type="text" />
-    </label>
+    <p>
+        Photo :
+        <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+        <span class="error" *ngIf="imageSizeError">{{ imageSizeError }}</span>
+    </p>
+
+    <div *ngIf="imagePreview" class="image-preview">
+        <img [src]="imagePreview" alt="Aperçu de la photo" />
+    </div>
 
     <button type="submit" [disabled]="pollutionForm.invalid">
-        ✅ Enregistrer les modifications
+        Enregistrer les modifications
     </button>
 </form>
 
 <br>
 
 <button routerLink="/pollutions">
-    ⬅️ Retour à la liste
+    Retour à la liste
 </button>

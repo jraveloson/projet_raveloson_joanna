@@ -80,8 +80,17 @@
 
     <p>
         Photo :
-        <input type="url" formControlName="photo_url" placeholder="URL de la photo" />
+        <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+        <span class="error" *ngIf="imageSizeError">{{ imageSizeError }}</span>
     </p>
+
+    <div *ngIf="imagePreview" class="image-preview">
+        <img [src]="imagePreview" alt="Aperçu de la photo" />
+    </div>
 
     <button type="submit" [disabled]="pollutionForm.invalid">Déclarer</button>
 </form>
+
+<button routerLink="/pollutions" class="back-button">
+    Retour à la liste
+</button>
