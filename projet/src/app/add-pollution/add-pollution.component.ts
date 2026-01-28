@@ -2,23 +2,29 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PollutionService } from '../services/pollution.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-add-pollution',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './add-pollution.component.html',
   styleUrls: ['./add-pollution.component.css']
 })
 export class AddPollutionComponent {
   pollutionForm: FormGroup;
+  maxDate: string;
 
   constructor(private fb: FormBuilder, private pollutionService: PollutionService, private router: Router) {
+    // Définir la date maximale (aujourd'hui) au format YYYY-MM-DD
+    const today = new Date();
+    this.maxDate = today.toISOString().split('T')[0];
+
     this.pollutionForm = this.fb.group({
       titre: ['', Validators.required],
       type_pollution: ['', Validators.required],
       description: ['', Validators.required],
-      date_observation: ['', Validators.required],
+      date_observation: ['', [Validators.required, this.maxDateValidator.bind(this)]],
       lieu: ['', Validators.required],
       latitude: [
         null,
@@ -30,6 +36,20 @@ export class AddPollutionComponent {
       ],
       photo_url: ['']
     });
+  }
+
+  maxDateValidator(control: any) {
+    if (!control.value) {
+      return null;
+    }
+    const inputDate = new Date(control.value);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (inputDate > today) {
+      return { maxDate: true };
+    }
+    return null;
   }
 
   onSubmit() {

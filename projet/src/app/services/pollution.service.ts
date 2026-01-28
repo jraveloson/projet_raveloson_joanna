@@ -24,7 +24,11 @@ export class PollutionService {
   }
 
   public getPollutions(): Observable<Pollution[]> {
-    return this.pollutions$.asObservable();
+    return this.http.get<Pollution[]>(`${this.apiUrl}/api/pollution`).pipe(
+      tap(data => {
+        this.pollutions$.next(data);
+      })
+    );
   }
 
   public getOne(id: number): Observable<Pollution> {
@@ -48,7 +52,12 @@ export class PollutionService {
   }
 
   public deletePollution(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/api/pollution/${id}`);
+    return this.http.delete(`${this.apiUrl}/api/pollution/${id}`).pipe(
+      tap(() => {
+        const current = this.pollutions$.getValue();
+        this.pollutions$.next(current.filter(p => p.id !== id));
+      })
+    );
   }
 
 

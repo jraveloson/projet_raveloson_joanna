@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { PollutionService } from '../services/pollution.service';
 import { FavoritesService } from '../services/favorites.service';
 import { Pollution } from '../models/pollution.model';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { UtilisateurInfo } from '../models/auth.model';
 import { TypePipe } from '../type.pipe';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-liste-pollutions',
@@ -17,12 +18,13 @@ import { TypePipe } from '../type.pipe';
   styleUrls: ['./liste-pollutions.component.css'],
   imports: [CommonModule, RouterLink, FormsModule, TypePipe]
 })
-export class ListePollutionsComponent implements OnInit {
+export class ListePollutionsComponent implements OnInit, OnDestroy {
   pollutions$!: Observable<Pollution[]>;
   favoritesCount$!: Observable<number>;
   selectedType: string = '';
   utilisateur: UtilisateurInfo | null = null;
   private favoriteIds: number[] = [];
+  private routerSubscription?: Subscription;
 
   constructor(
     private pollutionService: PollutionService,
@@ -32,11 +34,28 @@ export class ListePollutionsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.loadPollutions();
+
+    // Écouter les changements de navigation pour recharger les données
+    this.routerSubscription = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.loadPollutions();
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
+  }
+
+  private loadPollutions(): void {
     this.pollutions$ = this.pollutionService.getPollutions();
     this.favoritesCount$ = this.favoritesService.getFavoritesCount();
     this.utilisateur = this.authService.getUtilisateur();
 
-    // Charger les favoris au démarrage
+    // Charger les favoris
     this.favoritesService.getFavorites().subscribe(ids => {
       this.favoriteIds = ids;
     });

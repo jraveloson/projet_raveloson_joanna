@@ -4,6 +4,9 @@
     <p>
         Titre :
         <input type="text" formControlName="titre" placeholder="Titre de la pollution" />
+        <span class="error" *ngIf="pollutionForm.get('titre')?.invalid && pollutionForm.get('titre')?.touched">
+            Le titre est requis
+        </span>
     </p>
 
     <p>
@@ -17,31 +20,62 @@
             <option value="Air">Air</option>
             <option value="Autre">Autre</option>
         </select>
+        <span class="error"
+            *ngIf="pollutionForm.get('type_pollution')?.invalid && pollutionForm.get('type_pollution')?.touched">
+            Le type est requis
+        </span>
     </p>
 
     <p>
         Description :
         <textarea formControlName="description" placeholder="Description"></textarea>
+        <span class="error"
+            *ngIf="pollutionForm.get('description')?.invalid && pollutionForm.get('description')?.touched">
+            La description est requise
+        </span>
     </p>
 
     <p>
         Date :
         <input type="date" formControlName="date_observation" />
+        <span class="error"
+            *ngIf="pollutionForm.get('date_observation')?.invalid && pollutionForm.get('date_observation')?.touched">
+            <span *ngIf="pollutionForm.get('date_observation')?.errors?.['required']">La date est requise</span>
+            <span *ngIf="pollutionForm.get('date_observation')?.errors?.['maxDate']">La date ne peut pas être dans le
+                futur</span>
+        </span>
     </p>
 
     <p>
         Lieu :
         <input type="text" formControlName="lieu" placeholder="Lieu" />
+        <span class="error" *ngIf="pollutionForm.get('lieu')?.invalid && pollutionForm.get('lieu')?.touched">
+            Le lieu est requis
+        </span>
     </p>
 
     <p>
         Latitude :
         <input type="number" formControlName="latitude" placeholder="Latitude" />
+        <span class="error" *ngIf="pollutionForm.get('latitude')?.invalid && pollutionForm.get('latitude')?.touched">
+            <span *ngIf="pollutionForm.get('latitude')?.errors?.['required']">La latitude est requise</span>
+            <span *ngIf="pollutionForm.get('latitude')?.errors?.['min']">La latitude doit être supérieure ou égale à
+                -90</span>
+            <span *ngIf="pollutionForm.get('latitude')?.errors?.['max']">La latitude doit être inférieure ou égale à
+                90</span>
+        </span>
     </p>
 
     <p>
         Longitude :
         <input type="number" formControlName="longitude" placeholder="Longitude" />
+        <span class="error" *ngIf="pollutionForm.get('longitude')?.invalid && pollutionForm.get('longitude')?.touched">
+            <span *ngIf="pollutionForm.get('longitude')?.errors?.['required']">La longitude est requise</span>
+            <span *ngIf="pollutionForm.get('longitude')?.errors?.['min']">La longitude doit être supérieure ou égale à
+                -180</span>
+            <span *ngIf="pollutionForm.get('longitude')?.errors?.['max']">La longitude doit être inférieure ou égale à
+                180</span>
+        </span>
     </p>
 
     <p>
