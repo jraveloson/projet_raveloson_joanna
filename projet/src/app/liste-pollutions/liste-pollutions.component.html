@@ -1,32 +1,44 @@
 <div class="header">
     <h2>Liste des pollutions</h2>
     <div class="user-info">
+        <button [routerLink]="['/favorites']" class="favorites-btn">
+            ❤️ Favoris <span class="badge">{{ favoritesCount$ | async }}</span>
+        </button>
         <span>Connecté : <strong>{{ utilisateur?.login }}</strong></span>
         <button type="button" (click)="logout()">Déconnexion</button>
     </div>
 </div>
 
-<label for="filterType">Filtrer par type :</label>
-<select id="filterType" [(ngModel)]="selectedType">
-    <option value="">-- Sélectionnez --</option>
-    <option value="plastique">Plastique</option>
-    <option value="chimique">Chimique</option>
-    <option value="depot sauvage">Dépôt sauvage</option>
-    <option value="eau">Eau</option>
-    <option value="air">Air</option>
-    <option value="autre">Autre</option>
-</select>
-<button routerLink="/pollutions/add">Ajouter</button>
+<div class="filter-bar">
+    <button [routerLink]="['/pollutions/add']" class="add-btn">Ajouter une pollution</button>
+    <div class="filter-group">
+        <label for="filterType">Filtrer par type :</label>
+        <select id="filterType" [(ngModel)]="selectedType">
+            <option value="">-- Tous les types --</option>
+            <option value="plastique">Plastique</option>
+            <option value="chimique">Chimique</option>
+            <option value="depot sauvage">Dépôt sauvage</option>
+            <option value="eau">Eau</option>
+            <option value="air">Air</option>
+            <option value="autre">Autre</option>
+        </select>
+    </div>
+</div>
 
 <ul *ngIf="pollutions$ | async as pollutions; else loading">
     <li *ngFor="let p of pollutions | filterByType:selectedType" [routerLink]="['/pollutions', p.id]">
         <div class="pollution-title">{{ p.titre }}</div>
-        <div class="pollution-discoverer" *ngIf="p.userId">Découvert par : <strong>ID utilisateur #{{ p.userId
-                }}</strong></div>
-        <button [routerLink]="['/pollutions/edit', p.id]" (click)="$event.stopPropagation()">Modifier</button>
-        <button type="button" *ngIf="p.id !== undefined" (click)="deletePollution(p.id!); $event.stopPropagation()">
-            Supprimer
-        </button>
+        <div class="discovered-by" *ngIf="p.userId">Découvert par : ID #{{ p.userId }}</div>
+        <div class="buttons-container">
+            <button type="button" class="favorite-btn" [class.is-favorite]="isFavorite(p.id!)"
+                (click)="toggleFavorite(p.id!); $event.stopPropagation()">
+                {{ isFavorite(p.id!) ? '❤️ Retirer' : '🤍 Ajouter' }}
+            </button>
+            <button [routerLink]="['/pollutions/edit', p.id]" (click)="$event.stopPropagation()">Modifier</button>
+            <button type="button" *ngIf="p.id !== undefined" (click)="deletePollution(p.id!); $event.stopPropagation()">
+                Supprimer
+            </button>
+        </div>
     </li>
 </ul>
 

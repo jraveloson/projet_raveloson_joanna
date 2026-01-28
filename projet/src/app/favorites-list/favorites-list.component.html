@@ -1,0 +1,19 @@
+<h2>Mes favoris</h2>
+
+<div *ngIf="(favoritePollutions$ | async)?.length === 0; else hasFavorites" class="empty-message">
+    Aucun favori pour le moment.
+    <button routerLink="/pollutions">Retour à la liste</button>
+</div>
+
+<ng-template #hasFavorites>
+    <ul>
+        <li *ngFor="let p of favoritePollutions$ | async" [routerLink]="['/pollutions', p.id]">
+            <div class="pollution-title">{{ p.titre }}</div>
+            <div class="pollution-type">Type: {{ p.type_pollution }}</div>
+            <button [routerLink]="['/pollutions/edit', p.id]" (click)="$event.stopPropagation()">Modifier</button>
+            <button type="button" (click)="removeFavorite(p.id!); $event.stopPropagation()">Retirer des favoris</button>
+        </li>
+    </ul>
+</ng-template>
+
+<button routerLink="/pollutions">Retour à la liste</button>

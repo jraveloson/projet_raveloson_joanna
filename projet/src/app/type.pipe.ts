@@ -9,7 +9,9 @@ export class TypePipe implements PipeTransform {
 
   transform(pollutions: Pollution[], type: string): Pollution[] {
     if (!type) return pollutions;
-    return pollutions.filter(p => p.type_pollution === type);
+    return pollutions.filter(p =>
+      p.type_pollution && p.type_pollution.toLowerCase() === type.toLowerCase()
+    );
   }
 
 }

@@ -6,6 +6,7 @@ import { EditPollutionComponent } from './edit-pollution/edit-pollution.componen
 import { AddUtilisateurComponent } from './add-utilisateur/add-utilisateur.component';
 import { ListeUtilisateursComponent } from './liste-utilisateurs/liste-utilisateurs.component';
 import { LoginComponent } from './login/login.component';
+import { FavoritesListComponent } from './favorites-list/favorites-list.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'utilisateurs/add', pathMatch: 'full' },
@@ -14,6 +15,7 @@ export const routes: Routes = [
     { path: 'pollutions/add', component: AddPollutionComponent },
     { path: 'pollutions/:id', component: DetailsPollutionComponent },
     { path: 'pollutions/edit/:id', component: EditPollutionComponent },
+    { path: 'favorites', component: FavoritesListComponent },
 
     { path: 'utilisateurs/add', component: AddUtilisateurComponent },
     { path: 'utilisateurs', component: ListeUtilisateursComponent },
