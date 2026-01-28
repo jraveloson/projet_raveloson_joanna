@@ -31,6 +31,21 @@ export class PollutionService {
     );
   }
 
+  public searchPollutions(query: string): Observable<Pollution[]> {
+    if (!query.trim()) {
+      return this.getPollutions();
+    }
+    return this.getPollutions().pipe(
+      map(pollutions =>
+        pollutions.filter(p =>
+          p.titre.toLowerCase().includes(query.toLowerCase()) ||
+          p.description.toLowerCase().includes(query.toLowerCase()) ||
+          p.lieu.toLowerCase().includes(query.toLowerCase())
+        )
+      )
+    );
+  }
+
   public getOne(id: number): Observable<Pollution> {
     return this.http.get<Pollution>(`${this.apiUrl}/api/pollution/${id}`);
   }

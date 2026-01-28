@@ -11,6 +11,10 @@
 
 <div class="filter-bar">
     <button [routerLink]="['/pollutions/add']" class="add-btn">Ajouter une pollution</button>
+    <div class="search-group">
+        <input type="text" placeholder="Rechercher une pollution..." [(ngModel)]="searchQuery"
+            (ngModelChange)="onSearchChange($event)" class="search-input" />
+    </div>
     <div class="filter-group">
         <label for="filterType">Filtrer par type :</label>
         <select id="filterType" [(ngModel)]="selectedType">

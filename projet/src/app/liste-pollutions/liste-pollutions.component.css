@@ -41,6 +41,7 @@ h2 {
     padding: 1rem;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
+    flex-wrap: wrap;
 }
 
 .filter-group {
@@ -48,6 +49,7 @@ h2 {
     align-items: center;
     gap: 0.8rem;
     flex: 1;
+    min-width: 250px;
 }
 
 .filter-group label {
@@ -81,6 +83,39 @@ h2 {
     box-shadow: 0 0 0 3px rgba(2, 69, 32, 0.1);
 }
 
+.search-group {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 250px;
+}
+
+.search-input {
+    width: 100%;
+    max-width: 400px;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    border: 2px solid rgba(2, 69, 32, 0.3);
+    background: white;
+    color: #024520;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.search-input::placeholder {
+    color: rgba(2, 69, 32, 0.5);
+}
+
+.search-input:hover {
+    border-color: rgba(2, 69, 32, 0.6);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #024520;
+    box-shadow: 0 0 0 3px rgba(2, 69, 32, 0.1);
+}
+
 .add-btn {
     background: linear-gradient(135deg, #2196f3, #1976d2);
     padding: 0.7rem 1.5rem;
@@ -98,17 +133,18 @@ ul {
     list-style: none;
     padding: 0;
     margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(45%, 1fr));
+    gap: 1rem;
 }
 
 ul li {
     background: rgba(18, 160, 23, 0.25);
     padding: 0.8rem 1rem;
     border-radius: 10px;
-    margin-bottom: 0.5rem;
     font-weight: 500;
     display: flex;
     flex-direction: column;
-    width: 50%;
 }
 
 .buttons-container {

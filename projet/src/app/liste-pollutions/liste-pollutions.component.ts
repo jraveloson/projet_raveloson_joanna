@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, Subject } from 'rxjs';
 import { PollutionService } from '../services/pollution.service';
 import { FavoritesService } from '../services/favorites.service';
 import { Pollution } from '../models/pollution.model';
@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { UtilisateurInfo } from '../models/auth.model';
 import { TypePipe } from '../type.pipe';
-import { filter } from 'rxjs/operators';
+import { filter, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-liste-pollutions',
@@ -22,9 +22,12 @@ export class ListePollutionsComponent implements OnInit, OnDestroy {
   pollutions$!: Observable<Pollution[]>;
   favoritesCount$!: Observable<number>;
   selectedType: string = '';
+  searchQuery: string = '';
   utilisateur: UtilisateurInfo | null = null;
   private favoriteIds: number[] = [];
   private routerSubscription?: Subscription;
+  private searchSubscription?: Subscription;
+  private searchSubject = new Subject<string>();
 
   constructor(
     private pollutionService: PollutionService,
@@ -42,12 +45,32 @@ export class ListePollutionsComponent implements OnInit, OnDestroy {
     ).subscribe(() => {
       this.loadPollutions();
     });
+
+    // Configurer la recherche dynamique avec debounce et distinctUntilChanged
+    this.searchSubscription = this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(query => this.pollutionService.searchPollutions(query))
+    ).subscribe(results => {
+      this.pollutions$ = new Observable(observer => {
+        observer.next(results);
+        observer.complete();
+      });
+    });
   }
 
   ngOnDestroy(): void {
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
     }
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
+  }
+
+  onSearchChange(query: string): void {
+    this.searchQuery = query;
+    this.searchSubject.next(query);
   }
 
   private loadPollutions(): void {
